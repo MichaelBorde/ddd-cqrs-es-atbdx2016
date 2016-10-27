@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>DDD, CQRS et ES</title>
+
+    <meta name="description" content="DDD, CQRS et ES">
+    <meta name="author" content="Michael">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="reveal.js/css/theme/night.css" id="theme">
+    <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+
+  <body>
+    <div class="reveal">
+
+      <div class="slides">
+        <section>
+          <h1>DDD, CQRS et ES</h1>
+
+          <h3>Aux frontières de l'over-engineering</h3>
+
+          <p>
+            <small><a href="http://twitter.com/michael_borde">@michael_borde</a>
+              / <a href="http://arpinum.fr">arpinum.fr</a>
+            </small>
+          </p>
+          <img width="10%" height="10%" src="images/logo-arpinum.png" alt="Arpinum"/>
+        </section>
+
+        <section>
+          <h2>DDD</h2>
+          <p>(Domain-Driven Design)</p>
+        </section>
+
+        <section>
+          <h2>La mission :</h2>
+          <p>Résumer la complexité du produit à celle du domaine métier.</p>
+        </section>
+
+        <section data-background="images/tour-eiffel.jpg" class="section-top with-background-image">
+          <p>Construire un modèle du domaine.</p>
+        </section>
+
+        <section>
+          <h2>Un langage omniprésent</h2>
+          <ul>
+            <li>partagé avec le client</li>
+            <li>dans les histoires utilisateur</li>
+            <li>dans la doc</li>
+            <li>dans le code (noms et <strong>verbes</strong>)</li>
+            <li>privé de synonyme ou traduction</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Le Graal de l'architecture :</h2>
+        </section>
+
+        <section data-background="images/clean-architecture.jpg" data-background-size="contain" data-background-color="#fff">
+        </section>
+
+        <section>
+          <h2>Ou plus modestement :</h2>
+        </section>
+
+        <section data-background="images/architecture-old-school.jpg" data-background-size="contain" data-background-color="#fff">
+        </section>
+
+        <section>
+          <h2>Des points de frictions</h2>
+          <ul>
+            <li>l'enfer des ORM</li>
+            <li>intention de l'utilisateur diluée</li>
+            <li>que faire du reporting, etc ?</li>
+            <li>entités boulimiques</li>
+            <li>entrepôts boulimiques</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>CQRS</h2>
+          <p>(Command Query Responsibility Segregation)</p>
+        </section>
+
+        <section>
+          <h2>Du CQS à grande échelle</h2>
+          <p>Séparer le modèle d'écriture (command), du ou des modèles de lecture (query)</p>
+        </section>
+
+        <section>
+          <h2>Exemple sur un service</h2>
+          <pre><code class="typescript">
+interface UserWriteService {
+  create(user);
+  updateProfile(userId, profile);
+  grantRole(userId, role);
+}
+
+interface UserReadService {
+  getById(id);
+  findAll(criteria);
+  count();
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <p>Et sur un beau diagramme :</p>
+        </section>
+
+        <section data-background="images/architecture-cqrs.jpg" data-background-size="contain" data-background-color="#fff">
+        </section>
+
+        <section>
+          <h2>Eventual consistency</h2>
+          <p>La partie lecture sera cohérente à terme.</p>
+        </section>
+
+        <section data-background="images/fry.jpg">
+        </section>
+
+        <section>
+          <h2>Les points de frictions ?</h2>
+          <ul>
+            <li>l'enfer des ORM <span class="primary">x2</span></li>
+            <li class="striked">intention de l'utilisateur diluée</li>
+            <li class="striked">que faire du reporting, etc ?</li>
+            <li class="striked">entités boulimiques</li>
+            <li class="striked">entrepôts boulimiques</li>
+            <li class="primary">Eventual consistency</li>
+            <li class="primary">Pas de recherche côté commande</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>ES</h2>
+          <p>(Event Sourcing)</p>
+        </section>
+
+        <section>
+          <blockquote>
+            <p>Le bonheur ne se trouve pas au sommet de la montagne, mais dans la façon de la gravir</p>
+            <footer>Confucius</footer>
+          </blockquote>
+        </section>
+
+        <section>
+          <h2>Exemple d'événement</h2>
+          <pre><code class="json">
+{
+  "_id" : ObjectId("5808adaac540a7aa7a9ca160"),
+  "type" : "userSignedUp",
+  "date" : ISODate("2016-10-20T11:42:34.733+0000"),
+  "aggregate" : {
+    "id" : "fef594b6-83d7-4d26-9f20-96e7e99654b2",
+    "type" : "User"
+  },
+  "payload" : {
+    "email" : "michael.borde@arpinum.fr",
+    "password" : "$2a$10$eqSz6FuxhdjiZUYRGsODReIpLNVuDE90.6AcV2z3W3gpsno2ADLge"
+  }
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Un flux d'événements</h2>
+          <ul>
+            <li>001. userSignedUp</li>
+            <li>002. userLoggedIn</li>
+            <li>...</li>
+            <li>297. userProfileUpdated <span class="fragment primary">&larr; snapshot</span></li>
+            <li>298. creditCardAddedToUser</li>
+            <li>299. userProfileUpdated</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Un entrepôt "event sourcé"</h2>
+          <pre><code class="javascript">
+class EventSourcedRepository {
+
+  getById(id) {
+    return this._eventStore.eventsFromAggregate(id)
+      .then(events => apply(events));
+    }
+
+    function apply(events) {
+      // serious business
+    }
+  }
+
+  saveEvents(events) {
+    return this._eventStore.addAll(events);
+  }
+}
+          </code></pre>
+        </section>
+
+        <section>
+          <p>La persistence du modèle d'écriture devient triviale</p>
+          <p>(snapshots compris)</p>
+        </section>
+
+        <section>
+          <h2>A la découverte d'un domaine</h2>
+          <p>... de comptabilité personnelle</p>
+        </section>
+
+        <section>
+          <h2>Les événements</h2>
+          <p class="fragment primary" data-fragment-index="1">(puis les commandes)</p>
+          <ul>
+            <li>AccountAdded
+              <span class="fragment primary" data-fragment-index="1">&rarr; AddAccount</span>
+            </li>
+            <li>TransactionAddedToAccount
+              <span class="fragment primary" data-fragment-index="1">&rarr; AddTransactionToAccount</span>
+            </li>
+            <li>AccountBalanceUpdated</li>
+            <li>BankAccountAdded
+              <span class="fragment primary" data-fragment-index="1">&rarr; AddBankAccount</span>
+            </li>
+            <li>BankAccountSynced
+              <span class="fragment primary" data-fragment-index="1">&rarr; SyncBankAccount</span>
+            </li>
+            <li>UserSignedUp
+              <span class="fragment primary" data-fragment-index="1">&rarr; SignUserUp</span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Des agrégats se dessinent</h2>
+          <ul>
+            <li><span class="primary">Account</span>Added</li>
+            <li>TransactionAddedTo<span class="primary">Account</span></li>
+            <li><span class="primary">Account</span>BalanceUpdated</li>
+            <li><span class="primary">BankAccount</span>Added</li>
+            <li><span class="primary">BankAccount</span>Synced</li>
+            <li><span class="primary">User</span>SignedUp</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Quelques exceptions</h2>
+          <ul>
+            <li>LoginFailed</li>
+            <li>UserEmailAlreadyUsed</li>
+            <li>SyncFailed</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Les bounding contexts</h2>
+          <ul>
+            <li>Finance</li>
+            <li>Sync</li>
+            <li>Authentication</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Du code</h2>
+        </section>
+
+        <section>
+          <h2>Références et questions</h2>
+          <ul>
+            <li><a href="https://books.google.fr/books?id=xColAAPGubgC&dq">DDD (Eric Evans, 2003)</a>
+            </li>
+            <li><a href="https://books.google.fr/books?id=X7DpD5g3VP8C">Implementing DDD (Vaughn Vernon, 2013)</a></li>
+            <li><a href="http://cqrs.nu">http://cqrs.nu</a></li>
+            <li><a href="https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf">CQRS Documents by Greg Young
+              (2010)</a>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <!--[if lt IE 9]>
+    <script src="reveal.js/lib/js/html5shiv.js"></script><![endif]-->
+    <script src="reveal.js/lib/js/head.min.js"></script>
+    <script src="reveal.js/js/reveal.js"></script>
+    <script src="js/init.js"></script>
+  </body>
+</html>

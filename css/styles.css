@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+.reveal section img {
+  border: 0;
+}
+
+section.with-background-image p,
+section.with-background-image h1,
+section.with-background-image h2,
+section.with-background-image h3 {
+  color: #fff;
+  background: rgb(0, 0, 0);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+}
+
+section.with-background-image a {
+  color: snow;
+}
+
+section.section-top {
+  top: 0 !important;
+}
+
+.primary {
+  color: #e7ad52;
+}
+
+.striked {
+  text-decoration: line-through;
+}
