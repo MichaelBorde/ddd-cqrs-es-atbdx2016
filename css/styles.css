@@ -23,9 +23,13 @@ section.section-top {
 }
 
 .primary {
-  color: #e7ad52;
+  color: #8b743d;
 }
 
 .striked {
   text-decoration: line-through;
+}
+
+ul.ul-smaller {
+  font-size: smaller;
 }

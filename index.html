@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <link rel="stylesheet" href="reveal.js/css/reveal.css">
-    <link rel="stylesheet" href="reveal.js/css/theme/night.css" id="theme">
+    <link rel="stylesheet" href="reveal.js/css/theme/beige.css" id="theme">
     <link rel="stylesheet" href="reveal.js/lib/css/zenburn.css">
     <link rel="stylesheet" href="css/styles.css">
   </head>
@@ -132,7 +132,7 @@ interface UserReadService {
         <section>
           <h2>Les points de frictions ?</h2>
           <ul>
-            <li>l'enfer des ORM <span class="primary">x2</span></li>
+            <li>l'enfer des ORM</li>
             <li class="striked">intention de l'utilisateur diluée</li>
             <li class="striked">que faire du reporting, etc ?</li>
             <li class="striked">entités boulimiques</li>
@@ -167,7 +167,7 @@ interface UserReadService {
   },
   "payload" : {
     "email" : "michael.borde@arpinum.fr",
-    "password" : "$2a$10$eqSz6FuxhdjiZUYRGsODReIpLNVuDE90.6AcV2z3W3gpsno2ADLge"
+    "password" : "$2a$10$eqSz6FuxhdjiZUYR"
   }
 }
           </code></pre>
@@ -186,8 +186,13 @@ interface UserReadService {
         </section>
 
         <section>
+          <h2>Le worlflow</h2>
+          <img src="images/worflow-es.jpg" width="60%">
+        </section>
+
+        <section>
           <h2>Un entrepôt "event sourcé"</h2>
-          <pre><code class="javascript">
+          <pre><code class="javascript" data-trim="true">
 class EventSourcedRepository {
 
   getById(id) {
@@ -220,7 +225,7 @@ class EventSourcedRepository {
         <section>
           <h2>Les événements</h2>
           <p class="fragment primary" data-fragment-index="1">(puis les commandes)</p>
-          <ul>
+          <ul class="ul-smaller">
             <li>AccountAdded
               <span class="fragment primary" data-fragment-index="1">&rarr; AddAccount</span>
             </li>
@@ -284,6 +289,15 @@ class EventSourcedRepository {
             <li><a href="https://cqrs.files.wordpress.com/2010/11/cqrs_documents.pdf">CQRS Documents by Greg Young
               (2010)</a>
             </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Remerciements</h2>
+          <ul>
+            <li><a href="https://twitter.com/gregyoung">Greg Young (schémas, inspiration)</a></li>
+            <li><a href="https://twitter.com/unclebobmartin">Uncle Bob (schéma Clean Architecture)</a></li>
+            <li><a href="https://fr.wikipedia.org/wiki/Futurama">Futurama (photo de Fry)</a></li>
           </ul>
         </section>
       </div>
